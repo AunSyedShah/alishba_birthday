@@ -148,6 +148,29 @@
     .status { margin: 0; min-height: 1.4em; font-size: 14px; color: var(--muted); }
     .footer { margin: 0; font-size: 14px; color: var(--muted); }
 
+    .prompt {
+      width: 100%;
+      padding: 24px 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .prompt[hidden] { display: none; }
+    .prompt h2 { margin: 0; font-size: 20px; font-weight: 600; }
+    .prompt p { margin: 0; font-size: 15px; color: var(--muted); }
+    .btn-link {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      text-decoration: underline;
+      min-height: 48px;
+    }
+
     @media (max-width: 480px) {
       .countdown { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .quote-card { padding: 28px 20px; }
@@ -159,6 +182,15 @@
   <p class="eyebrow">A little countdown, just for you</p>
   <h1>Alishba Aun</h1>
   <p class="subtitle">Birthday on <strong>12 December 2026</strong></p>
+
+  <section class="prompt" id="prompt" aria-labelledby="prompt-title" hidden>
+    <h2 id="prompt-title">Get a quote every morning</h2>
+    <p>Allow notifications and a new quote will arrive every day at 12:00 AM PKT. You can skip this and still see everything on the page.</p>
+    <div class="actions">
+      <button type="button" class="btn-primary" id="enable-btn">Turn on notifications</button>
+      <button type="button" class="btn-link" id="later-btn">Not now</button>
+    </div>
+  </section>
 
   <section class="countdown" aria-label="Time until the birthday">
     <div class="unit"><div class="num" id="days">--</div><div class="label">Days</div></div>
@@ -174,7 +206,6 @@
   </section>
 
   <div class="actions">
-    <button type="button" class="btn-primary" id="notify-btn">Turn on daily notifications</button>
     <button type="button" class="btn-secondary" id="show-btn">Send me today's quote</button>
   </div>
   <p class="status" id="status" role="status"></p>
@@ -326,19 +357,28 @@
 
   function setStatus(text) { $('status').textContent = text; }
 
-  function updateNotifyButton() {
-    const btn = $('notify-btn');
-    if (!('Notification' in window)) {
-      btn.textContent = 'Notifications not supported';
-      btn.disabled = true;
-    } else if (Notification.permission === 'granted') {
-      btn.textContent = 'Notifications are on';
-      btn.disabled = true;
-    } else if (Notification.permission === 'denied') {
-      btn.textContent = 'Notifications blocked';
-      btn.disabled = true;
+  // The card is optional: it can be skipped, and it comes back after a few days.
+  const SNOOZE_KEY = 'alishba-birthday-prompt-snoozed-until';
+  const SNOOZE_DAYS = 3;
+
+  function promptSnoozed() {
+    return Date.now() < Number(getStored(SNOOZE_KEY) || 0);
+  }
+
+  function updatePrompt() {
+    const supported = 'Notification' in window;
+    if (supported && Notification.permission === 'denied') {
+      $('prompt').hidden = true;
       setStatus('Notifications are blocked. Allow them in your browser settings for this site.');
+      return;
     }
+    $('prompt').hidden = !supported || Notification.permission === 'granted' || promptSnoozed();
+  }
+
+  function snoozePrompt() {
+    setStored(SNOOZE_KEY, String(Date.now() + SNOOZE_DAYS * 86400000));
+    updatePrompt();
+    setStatus('No problem. You can still see the countdown and today\'s quote below.');
   }
 
   async function enableNotifications() {
@@ -347,13 +387,13 @@
       return;
     }
     const permission = await Notification.requestPermission();
-    updateNotifyButton();
+    updatePrompt();
     if (permission === 'granted') {
       setStatus('Done. You will get a new quote every day at 12:00 AM PKT.');
       notifyIfNewDay();
       scheduleMidnight();
-    } else {
-      setStatus('Notifications were not allowed.');
+    } else if (permission === 'default') {
+      setStatus('Notifications were not turned on. You can try again any time.');
     }
   }
 
@@ -363,7 +403,8 @@
   }
 
   // ---- Start ---------------------------------------------------------------
-  $('notify-btn').addEventListener('click', enableNotifications);
+  $('enable-btn').addEventListener('click', enableNotifications);
+  $('later-btn').addEventListener('click', snoozePrompt);
   $('show-btn').addEventListener('click', async () => {
     if (!notificationsAllowed()) {
       setStatus('Turn on notifications first to receive the quote as a notification.');
@@ -386,7 +427,7 @@
   }, 1000);
 
   registerServiceWorker();
-  updateNotifyButton();
+  updatePrompt();
   if (notificationsAllowed()) {
     notifyIfNewDay();
     scheduleMidnight();
