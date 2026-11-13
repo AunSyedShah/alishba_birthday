@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alishba's Birthday Countdown</title>
+  <meta name="description" content="A countdown to 12 December 2026 with a new quote every day.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FBF6F1;
+      --card: #FFFFFF;
+      --text: #2A1F24;
+      --muted: #7A5C66;
+      --accent: #B5476A;
+      --accent-soft: #F3DDE4;
+      --shadow: 0 12px 32px rgba(42, 31, 36, 0.1);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #1E161A;
+        --card: #2B2026;
+        --text: #F7EEF2;
+        --muted: #C7AEB9;
+        --accent: #E58AA6;
+        --accent-soft: #3D2A33;
+        --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #1E161A;
+      --card: #2B2026;
+      --text: #F7EEF2;
+      --muted: #C7AEB9;
+      --accent: #E58AA6;
+      --accent-soft: #3D2A33;
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      text-align: center;
+    }
+    .eyebrow {
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    h1 {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: clamp(48px, 9vw, 72px);
+      line-height: 1.05;
+    }
+    .subtitle { margin: 0; font-size: 18px; color: var(--muted); }
+
+    .countdown {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .unit {
+      padding: 24px 8px;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    .unit .num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 7vw, 56px);
+      font-weight: 700;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .unit .label {
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .quote-card {
+      width: 100%;
+      padding: 40px 32px;
+      background: var(--card);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .quote-date {
+      margin: 0;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .quote-text {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(24px, 4vw, 32px);
+      line-height: 1.35;
+      white-space: pre-line;
+    }
+    .quote-note { margin: 0; font-size: 15px; color: var(--muted); }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    button {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 14px 26px;
+      border-radius: 999px;
+      cursor: pointer;
+      min-height: 48px;
+    }
+    .btn-primary { border: 0; background: var(--accent); color: #FFFFFF; }
+    .btn-secondary { border: 2px solid var(--accent); background: transparent; color: var(--accent); }
+    button:disabled { opacity: 0.6; cursor: default; }
+    button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    .status { margin: 0; min-height: 1.4em; font-size: 14px; color: var(--muted); }
+    .footer { margin: 0; font-size: 14px; color: var(--muted); }
+
+    @media (max-width: 480px) {
+      .countdown { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .quote-card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">A little countdown, just for you</p>
+  <h1>Alishba Aun</h1>
+  <p class="subtitle">Birthday on <strong>12 December 2026</strong></p>
+
+  <section class="countdown" aria-label="Time until the birthday">
+    <div class="unit"><div class="num" id="days">--</div><div class="label">Days</div></div>
+    <div class="unit"><div class="num" id="hours">--</div><div class="label">Hours</div></div>
+    <div class="unit"><div class="num" id="minutes">--</div><div class="label">Minutes</div></div>
+    <div class="unit"><div class="num" id="seconds">--</div><div class="label">Seconds</div></div>
+  </section>
+
+  <section class="quote-card" aria-live="polite">
+    <p class="quote-date" id="quote-date">Today's quote</p>
+    <p class="quote-text" id="quote-text"></p>
+    <p class="quote-note">A new quote arrives every day at 12:00 AM PKT.</p>
+  </section>
+
+  <div class="actions">
+    <button type="button" class="btn-primary" id="notify-btn">Turn on daily notifications</button>
+    <button type="button" class="btn-secondary" id="show-btn">Send me today's quote</button>
+  </div>
+  <p class="status" id="status" role="status"></p>
+
+  <p class="footer">Made with love, for the most special person in my life.</p>
+</main>
+
+<script>
+  // One original quote per day, from 13 November to 12 December 2026 (PKT).
+  const QUOTES = [
+    "Tum meri subah ki pehli khushi ho,\naur har din ko khoobsurat banati ho.",
+    "Some people make a room feel like home.\nYou make every place feel like ours.",
+    "Tumhari hansi meri thakan ki sabse achi dawa hai.",
+    "Every love story is beautiful, but ours\nis my favourite.",
+    "Chaand bhi sharma jaata hai\njab tum muskurati ho.",
+    "Good things come to those who wait,\nand I am so glad I waited for you.",
+    "Tum saath ho to mushkil bhi aasaan lagti hai.",
+    "You are the reason I believe in\nquiet, perfect moments.",
+    "Har dua mein ek hi khwahish hai:\ntum hamesha khush raho.",
+    "Tumhare bina har safar adhoora hai,\ntumhare saath har raasta mukammal.",
+    "Love is not just a word for us;\nit is the way we show up for each other every day.",
+    "Tum mujhe woh sukoon deti ho\njo kisi aur jagah nahin milta.",
+    "Kuch log zindagi mein aate hain aur sab kuch badal dete hain.\nTum unhi mein se ho.",
+    "Your laugh is my favourite sound,\nand I could listen to it forever.",
+    "Mohabbat ka matlab hai tumhe\nchhoti chhoti khushiyan dena, roz.",
+    "Pyaar itna saada bhi ho sakta hai,\njab tum saath ho.",
+    "Duniya mein sab kuch badal sakta hai,\nlekin mera tum se pyaar nahin badlega.",
+    "Har subah tumhe dekhna\nmeri sabse pyari aadat hai.",
+    "Tum meri kahani ki woh line ho\njise main baar baar padhna chahta hoon.",
+    "Sardi ho ya garam chai,\ntumhara saath hi mera sukoon hai.",
+    "You make ordinary days feel like\nlittle celebrations.",
+    "Sitaaron se bhari raat bhi\ntumhari muskurahat ke aage feeki lagti hai.",
+    "Tumhara saath har mushkil ko aasaan\naur har khushi ko double kar deta hai.",
+    "Har ginti ke saath mera dil ek hi baat kehta hai:\nI love you more.",
+    "Be-nazeer hai tumhari muskurahat,\naur be-misaal hai tumhara dil.",
+    "Hamari chhoti si duniya bhi kaafi hai,\njab usmein sirf hum dono hon.",
+    "Tum mere liye woh ghar ho\njahan main hamesha wapas aana chahta hoon.",
+    "Birthday ke liye sirf ek wish:\ntum hamesha muskurati raho, meri zindagi roshan karne wali.",
+    "Kal tumhara din hai, aur aaj main sirf yeh chahta hoon\nke tum dil se khush raho.",
+    "Happy Birthday, Alishba.\nTum meri sabse qeemti khushi ho, aaj aur hamesha."
+  ];
+
+  const TZ = 'Asia/Karachi';                 // Pakistan Standard Time, UTC+5 (no daylight saving)
+  const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
+  const START = [2026, 11, 13];             // first quote day (PKT)
+  const BIRTHDAY = [2026, 12, 12];          // birthday (PKT midnight)
+  const NOTIFIED_KEY = 'alishba-birthday-last-notified';
+
+  const $ = (id) => document.getElementById(id);
+  const dayNumber = (y, m, d) => Math.floor(Date.UTC(y, m - 1, d) / 86400000);
+
+  // Today's calendar date in PKT, as [year, month, day].
+  function pktToday() {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(new Date());
+    const get = (type) => Number(parts.find((p) => p.type === type).value);
+    return [get('year'), get('month'), get('day')];
+  }
+
+  function pktKey() {
+    return pktToday().join('-');
+  }
+
+  function quoteIndex() {
+    const [y, m, d] = pktToday();
+    const offset = dayNumber(y, m, d) - dayNumber(...START);
+    return Math.min(Math.max(offset, 0), QUOTES.length - 1);
+  }
+
+  function renderQuote() {
+    const label = new Intl.DateTimeFormat('en-GB', { timeZone: TZ, day: 'numeric', month: 'long' })
+      .format(new Date());
+    $('quote-date').textContent = "Today's quote · " + label;
+    $('quote-text').textContent = QUOTES[quoteIndex()];
+  }
+
+  function renderCountdown() {
+    const [by, bm, bd] = BIRTHDAY;
+    const target = Date.UTC(by, bm - 1, bd) - PKT_OFFSET_MS;   // 12 Dec 2026, 00:00 PKT
+    let diff = Math.max(0, target - Date.now());
+    const days = Math.floor(diff / 86400000);
+    diff %= 86400000;
+    const hours = Math.floor(diff / 3600000);
+    diff %= 3600000;
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    const pad = (n) => String(n).padStart(2, '0');
+    $('days').textContent = pad(days);
+    $('hours').textContent = pad(hours);
+    $('minutes').textContent = pad(minutes);
+    $('seconds').textContent = pad(seconds);
+  }
+
+  // ---- Notifications -------------------------------------------------------
+  // GitHub Pages is static, so notifications come from the browser while the
+  // page is open or the browser is running. The daily quote is sent once per
+  // PKT day, at the first moment the page runs after 12:00 AM PKT.
+
+  function getStored(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function setStored(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* storage blocked */ }
+  }
+
+  function notificationsAllowed() {
+    return 'Notification' in window && Notification.permission === 'granted';
+  }
+
+  async function sendQuoteNotification() {
+    const title = 'Good morning, Alishba';
+    const body = QUOTES[quoteIndex()].replace(/\n/g, ' ');
+    try {
+      if ('serviceWorker' in navigator) {
+        const reg = await navigator.serviceWorker.getRegistration();
+        if (reg) {
+          await reg.showNotification(title, { body, tag: 'daily-quote' });
+          return true;
+        }
+      }
+      new Notification(title, { body, tag: 'daily-quote' });
+      return true;
+    } catch (e) {
+      console.warn('Notification failed', e);
+      return false;
+    }
+  }
+
+  // Sends today's quote once per PKT day.
+  async function notifyIfNewDay() {
+    if (!notificationsAllowed()) return;
+    const key = pktKey();
+    if (getStored(NOTIFIED_KEY) === key) return;
+    if (await sendQuoteNotification()) setStored(NOTIFIED_KEY, key);
+  }
+
+  // Wakes up at the next 12:00 AM PKT while the page stays open.
+  function scheduleMidnight() {
+    const [y, m, d] = pktToday();
+    const nextMidnight = Date.UTC(y, m - 1, d + 1) - PKT_OFFSET_MS;
+    const wait = Math.max(1000, nextMidnight - Date.now() + 1000);
+    setTimeout(() => {
+      renderQuote();
+      notifyIfNewDay();
+      scheduleMidnight();
+    }, Math.min(wait, 2147483647));
+  }
+
+  function setStatus(text) { $('status').textContent = text; }
+
+  function updateNotifyButton() {
+    const btn = $('notify-btn');
+    if (!('Notification' in window)) {
+      btn.textContent = 'Notifications not supported';
+      btn.disabled = true;
+    } else if (Notification.permission === 'granted') {
+      btn.textContent = 'Notifications are on';
+      btn.disabled = true;
+    } else if (Notification.permission === 'denied') {
+      btn.textContent = 'Notifications blocked';
+      btn.disabled = true;
+      setStatus('Notifications are blocked. Allow them in your browser settings for this site.');
+    }
+  }
+
+  async function enableNotifications() {
+    if (!('Notification' in window)) {
+      setStatus('This browser does not support notifications.');
+      return;
+    }
+    const permission = await Notification.requestPermission();
+    updateNotifyButton();
+    if (permission === 'granted') {
+      setStatus('Done. You will get a new quote every day at 12:00 AM PKT.');
+      notifyIfNewDay();
+      scheduleMidnight();
+    } else {
+      setStatus('Notifications were not allowed.');
+    }
+  }
+
+  async function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+    try { await navigator.serviceWorker.register('sw.js'); } catch (e) { console.warn(e); }
+  }
+
+  // ---- Start ---------------------------------------------------------------
+  $('notify-btn').addEventListener('click', enableNotifications);
+  $('show-btn').addEventListener('click', async () => {
+    if (!notificationsAllowed()) {
+      setStatus('Turn on notifications first to receive the quote as a notification.');
+      return;
+    }
+    await sendQuoteNotification();
+    setStatus("Today's quote has been sent.");
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) { renderQuote(); notifyIfNewDay(); }
+  });
+
+  renderQuote();
+  renderCountdown();
+  setInterval(() => {
+    renderCountdown();
+    // Refresh the quote if the PKT day changed while the page was open.
+    if ($('quote-text').textContent !== QUOTES[quoteIndex()]) renderQuote();
+  }, 1000);
+
+  registerServiceWorker();
+  updateNotifyButton();
+  if (notificationsAllowed()) {
+    notifyIfNewDay();
+    scheduleMidnight();
+  }
+</script>
+</body>
+</html>
