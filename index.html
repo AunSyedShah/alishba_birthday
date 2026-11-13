@@ -10,32 +10,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FBF6F1;
-      --card: #FFFFFF;
-      --text: #2A1F24;
-      --muted: #7A5C66;
-      --accent: #B5476A;
-      --accent-soft: #F3DDE4;
-      --shadow: 0 12px 32px rgba(42, 31, 36, 0.1);
+      --bg: #FFFFFF;
+      --card: #F5F6F8;
+      --text: #1F2328;
+      --muted: #5F6670;
+      --accent: #374151;
+      --on-accent: #FFFFFF;
+      --border: #E3E6EA;
+      --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
     }
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --bg: #1E161A;
-        --card: #2B2026;
-        --text: #F7EEF2;
-        --muted: #C7AEB9;
-        --accent: #E58AA6;
-        --accent-soft: #3D2A33;
+        --bg: #111418;
+        --card: #1C2026;
+        --text: #F3F4F6;
+        --muted: #A9B0BA;
+        --accent: #E5E7EB;
+        --on-accent: #111418;
+        --border: #2A2F37;
         --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }
     }
     :root[data-theme="dark"] {
-      --bg: #1E161A;
-      --card: #2B2026;
-      --text: #F7EEF2;
-      --muted: #C7AEB9;
-      --accent: #E58AA6;
-      --accent-soft: #3D2A33;
+      --bg: #111418;
+      --card: #1C2026;
+      --text: #F3F4F6;
+      --muted: #A9B0BA;
+      --accent: #E5E7EB;
+      --on-accent: #111418;
+      --border: #2A2F37;
       --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
     }
 
@@ -82,6 +85,7 @@
     .unit {
       padding: 24px 8px;
       background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 20px;
       box-shadow: var(--shadow);
     }
@@ -103,6 +107,7 @@
       width: 100%;
       padding: 40px 32px;
       background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 24px;
       box-shadow: var(--shadow);
       display: flex;
@@ -135,8 +140,8 @@
       cursor: pointer;
       min-height: 48px;
     }
-    .btn-primary { border: 0; background: var(--accent); color: #FFFFFF; }
-    .btn-secondary { border: 2px solid var(--accent); background: transparent; color: var(--accent); }
+    .btn-primary { border: 0; background: var(--accent); color: var(--on-accent); }
+    .btn-secondary { border: 2px solid var(--border); background: transparent; color: var(--text); }
     button:disabled { opacity: 0.6; cursor: default; }
     button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
